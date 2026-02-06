@@ -2,9 +2,6 @@
 
 module tb_timer_ip;
 
-    // ------------------------------------------------------------
-    // DUT signals
-    // ------------------------------------------------------------
     reg         clk;
     reg         resetn;
     reg         sel;
@@ -14,9 +11,6 @@ module tb_timer_ip;
     wire [31:0] rdata;
     wire        timeout;
 
-    // ------------------------------------------------------------
-    // Instantiate DUT
-    // ------------------------------------------------------------
     timer_ip dut (
         .clk     (clk),
         .resetn (resetn),
@@ -28,14 +22,8 @@ module tb_timer_ip;
         .timeout (timeout)
     );
 
-    // ------------------------------------------------------------
-    // Clock generation (100 MHz)
-    // ------------------------------------------------------------
     always #5 clk = ~clk;
 
-    // ------------------------------------------------------------
-    // Bus write task
-    // ------------------------------------------------------------
     task bus_write(input [31:0] waddr, input [31:0] data);
     begin
         @(posedge clk);
@@ -51,9 +39,6 @@ module tb_timer_ip;
     end
     endtask
 
-    // ------------------------------------------------------------
-    // Bus read task
-    // ------------------------------------------------------------
     task bus_read(input [31:0] raddr);
     begin
         @(posedge clk);
@@ -68,9 +53,6 @@ module tb_timer_ip;
     end
     endtask
 
-    // ------------------------------------------------------------
-    // Test sequence
-    // ------------------------------------------------------------
     initial begin
         // Dump waves
         $dumpfile("timer_ip.vcd");
@@ -84,13 +66,11 @@ module tb_timer_ip;
         addr   = 0;
         wdata  = 0;
 
-        // Reset
+        
         #20;
         resetn = 1;
 
-        // --------------------------------------------------------
-        // TEST 1: ONE-SHOT MODE
-        // --------------------------------------------------------
+        
         $display("\n--- ONE-SHOT MODE TEST ---");
 
         bus_write(32'h04, 10);      // LOAD = 10
@@ -103,9 +83,7 @@ module tb_timer_ip;
 
         bus_read(32'h0C);           // STATUS (timeout)
 
-        // --------------------------------------------------------
-        // TEST 2: PERIODIC MODE
-        // --------------------------------------------------------
+        
         $display("\n--- PERIODIC MODE TEST ---");
 
         bus_write(32'h04, 5);       // LOAD = 5
