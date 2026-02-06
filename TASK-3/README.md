@@ -152,6 +152,9 @@ This step validates the **entire system end‑to‑end** using real software run
 
 ![img2](https://github.com/user-attachments/assets/cb873ee6-d701-41fa-9f96-32212ace3034)
 
+<img width="798" height="560" alt="Screenshot from 2026-02-04 14-18-10" src="https://github.com/user-attachments/assets/3eb6e4d2-f7d3-4642-adb3-5933a2154c4e" />
+
+
 ![img3](https://github.com/user-attachments/assets/0a572d9f-0f00-49d4-8aac-f1846ae30375)
 
 ![img4](https://github.com/user-attachments/assets/ea60b077-6e3c-4e7b-9cc6-6ad899ec0d89)
