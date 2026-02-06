@@ -16,16 +16,17 @@ module tb_timer_ip;
     localparam TMR_COUNT   = 32'h18;
     localparam TMR_STATUS  = 32'h1C;
 
-    timer_ip dut (
-        .sys_clk    (sys_clk),
-        .rst_n      (rst_n),
-        .bus_sel   (bus_sel),
-        .bus_wr    (bus_wr),
-        .bus_addr  (bus_addr),
-        .bus_wdata (bus_wdata),
-        .bus_rdata (bus_rdata),
-        .timer_irq (timer_irq)
-    );
+module TIMER uut (
+    input              clk_i,
+    input              reset_n_i,
+    input              cfg_sel_i,
+    input              cfg_wr_i,
+    input  [31:0]      cfg_addr_i,
+    input  [31:0]      cfg_wdata_i,
+    output reg [31:0]  cfg_rdata_o,
+    output reg         irq_o
+);
+
 
     always #5 sys_clk = ~sys_clk;
 
