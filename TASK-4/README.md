@@ -153,6 +153,15 @@ This cleanly separates **software configuration** from **hardware execution**.
 
 ## Step 5 – Simulation‑Based Verification
 
+![pic1](https://github.com/user-attachments/assets/1cfe96e3-1a80-4a3f-afcd-2afc3fbd7f06)
+
+![pic2](https://github.com/user-attachments/assets/7a5fcbd1-1e49-45df-b08b-4bdcd029f234)
+
+![pic3](https://github.com/user-attachments/assets/5ffeb4a7-d332-4a27-b4bb-b2ba5faf3187)
+
+
+
+
 
 
 ### Verified Through Simulation
