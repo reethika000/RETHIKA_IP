@@ -6,7 +6,7 @@
 `default_nettype none
 `include "clockworks.v"
 
-`include "gpio_reg_ip.v"
+`include "gpio_reg_bank.v"
 
 
 `ifdef BENCH
@@ -429,7 +429,7 @@ module SOC (
     wire [31:0] gpio_rdata;
     wire [31:0] gpio_out;
 
-    gpio_reg_ip GPIO (
+    gpio_reg_bank IP_INST (
         .clk        (clk),
         .rst_n      (resetn),
         .bus_valid (is_gpio),
