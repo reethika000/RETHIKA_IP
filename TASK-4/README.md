@@ -159,9 +159,9 @@ This cleanly separates **software configuration** from **hardware execution**.
 
 ![pic3](https://github.com/user-attachments/assets/5ffeb4a7-d332-4a27-b4bb-b2ba5faf3187)
 
+![pic5](https://github.com/user-attachments/assets/ffb6ed1a-aafc-4efb-8098-89dba84c73ca)
 
-
-
+![pic5](https://github.com/user-attachments/assets/372f251c-c1eb-4f6c-88e7-7ef03d0d7249)
 
 
 ### Verified Through Simulation
