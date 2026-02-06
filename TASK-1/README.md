@@ -34,7 +34,7 @@ A mathematical algorithm (Summation of Integers) was used as a benchmark to test
 The code was modified (increasing the summation limit) to verify that the environment handles re-compilation and behavioral changes accurately.
 
 
-# 3. VSDFPGA Firmware Architecture
+## 3. VSDFPGA Firmware Architecture
 The final stage involved building the official VSDFPGA firmware to generate hardware-ready artifacts.
 ### Build System:
 Utilized make to automate the generation.
@@ -56,12 +56,40 @@ riscv64-unknown-elf-gcc -o sum1ton.o sum1ton.c
 spike pk sum1ton.o
 ```
 # ouput
-```sum from 1 to 9 is 45
+```bash
+sum from 1 to 9 is 45
 ```
 
 <img width="1920" height="1200" alt="Screenshot 2025-12-18 165659" src="https://github.com/user-attachments/assets/0d447bd3-88e3-43e3-9165-30fdbf320895" />
 
+## Program is changed 
+```bash
+riscv64-unknown-elf-gcc -o sum1ton.o sum1ton.c  
+spike pk sum1ton.o
+```
+output
+```bash
+sum from 1 to 6 is 21
+```
+<img width="1920" height="1200" alt="Screenshot 2025-12-18 165659" src="https://github.com/user-attachments/assets/89bb5e77-8ded-4ad1-a200-842250b0e31b" />
 
+## Commands used 
+```bash
+git clone https://github.com/vsdip/vsdfpga_labs.git  
+cd vsdfpga_labs/basicRISCV/Firmware
+riscv_logo.bram.hex
+riscv64-unknown-elf-gcc -o riscv_logo.o riscv_logo.c  
+spike pk riscv_logo.o
+```
+<img width="1920" height="1200" alt="Screenshot 2025-12-18 180614" src="https://github.com/user-attachments/assets/0b93b41c-353b-4ca4-a0bc-524550b4d13d" />
+
+
+## OUTPUT
+```bash
+LEARN TO THINK LIKE A CHIP  
+VSDSQUADRON FPGA MINI  
+BRINGS RISC-V TO VSD CLASSROOM
+```
 
 
 ## Architectural Insights (Understanding Check)
