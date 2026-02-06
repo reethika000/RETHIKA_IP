@@ -5,18 +5,18 @@
 # OBJECTIVE
 The primary goal of this phase was to architect a stable Linux-based development environment for RISC-V ISA exploration. This involved verifying the cross-compilation toolchain, ensuring functional parity between C-source code and RISC-V binaries, and validating firmware execution via high-level simulators—all prior to physical FPGA deployment.
 
-# Project Environment
+### Project Environment
 To maintain consistency and reproducibility, the entire workflow was executed within a cloud-integrated Linux environment.
-# Infrastructure: 
+### Infrastructure: 
 GitHub Codespaces (Cloud Instance)
 #OS Kernel: 
 Linux (Ubuntu-based)
-# Primary IDE: 
+### Primary IDE: 
 VS Code with Integrated Terminal
-# Graphical Interface: 
+### Graphical Interface: 
 noVNC Web Terminal (for visual output verification)
 
-# Task cycle
+## Task cycle
 ## 1. Toolchain Integrity Check
 Before beginning development, the system was audited to ensure all necessary binaries were present in the system
 ### Compiler: 
@@ -71,7 +71,8 @@ output
 ```bash
 sum from 1 to 6 is 21
 ```
-<img width="1920" height="1200" alt="Screenshot 2025-12-18 165659" src="https://github.com/user-attachments/assets/89bb5e77-8ded-4ad1-a200-842250b0e31b" />
+<img width="1920" height="1001" alt="Screenshot 2025-12-18 173742" src="https://github.com/user-attachments/assets/c80ee59b-5f05-4cfa-919b-9bdb9ffc58bf" />
+
 
 ## Commands used 
 ```bash
@@ -81,8 +82,9 @@ riscv_logo.bram.hex
 riscv64-unknown-elf-gcc -o riscv_logo.o riscv_logo.c  
 spike pk riscv_logo.o
 ```
-<img width="1920" height="1200" alt="Screenshot 2025-12-18 180614" src="https://github.com/user-attachments/assets/0b93b41c-353b-4ca4-a0bc-524550b4d13d" />
+<img width="862" height="980" alt="Screenshot 2025-12-18 180614" src="https://github.com/user-attachments/assets/21275093-2a37-4d55-bc6b-7ada7b89e42a" />
 
+<img width="1660" height="935" alt="FINALOUTPUT" src="https://github.com/user-attachments/assets/97b86923-7bad-4c23-9f30-0899d7fc554d" />
 
 ## OUTPUT
 ```bash
@@ -94,39 +96,39 @@ BRINGS RISC-V TO VSD CLASSROOM
 
 ## Architectural Insights (Understanding Check)
 
-# Summary of Verification
-# Environment Setup: 
+## Summary of Verification
+### Environment Setup: 
 Toolchain and simulators are correctly configured and path-verified.
-# Functional Simulation: 
+### Functional Simulation: 
 Spike simulator successfully handles complex RISC-V binary execution.
-# Workflow Readiness:
+### Workflow Readiness:
 Multi-repository synchronization and firmware generation are fully operational.
 
  ## Understanding Check
 
-# 1. Where is the RISC-V program located?
+### 1. Where is the RISC-V program located?
 The RISC-V program is located at samples directory as sum1ton.c
 vsd-riscv2/samples/sum1ton.c
 and can edited and executed many times using gedit sum1ton.c
 
-# 2. How is the program compiled and loaded into memory?
+### 2. How is the program compiled and loaded into memory?
 The program is compiled using compiler riscv64-unknown-elf-gcc sum1ton.c -o sum1ton.o
 This converts sum1ton.c into RISC-V ELF executable.
 pk(proxy kernel) loads the program into memory
 and executed it using spike with the proxy kernel spike pk sum1ton.o
 
-# 3. How does the RISC-V core access memory and memory-mapped IO?
+### 3. How does the RISC-V core access memory and memory-mapped IO?
 The RISC-V core accesses program and data memory using standard load/store instructions. Memory-mapped I/O, such as console output,is accessed through system calls (ecall),which are intercepted by spike and handled by pk to produce output on host system
 
-# 4.  Where would a new FPGA IP block logically integrate?
+### 4.  Where would a new FPGA IP block logically integrate?
 A new FPGA IP block would be integrated inside the RTL level ,connected to the RISC-V core through the Soc interconnect
 vsd-riscv2/samples/vsdfpga_labs/basicRISCv/RTL
 
 
 ## Reference Resources
-# Repository Reference:
-# vsd-riscv2
+### Repository Reference:
+### vsd-riscv2
 https://github.com/vsdip/vsd-riscv2
 
-# vsdfpga_labs
+### vsdfpga_labs
 https://github.com/vsdip/vsdfpga_labs
