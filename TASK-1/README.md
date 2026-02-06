@@ -1,11 +1,11 @@
-# RISC-V System Synthesis & Environment Configuration
+<img width="1920" height="1200" alt="Screenshot 2025-12-18 165659" src="https://github.com/user-attachments/assets/8aa82225-19e0-40e1-a7b6-d07541a124aa" /><img width="1920" height="1200" alt="Screenshot 2025-12-18 165659" src="https://github.com/user-attachments/assets/8aa82225-19e0-40e1-a7b6-d07541a124aa" /># RISC-V System Synthesis & Environment Configuration
 
-## TASK-1: Toolchain Validation and Firmware Bring-up
+# TASK-1: Toolchain Validation and Firmware Bring-up
 
 # OBJECTIVE
 The primary goal of this phase was to architect a stable Linux-based development environment for RISC-V ISA exploration. This involved verifying the cross-compilation toolchain, ensuring functional parity between C-source code and RISC-V binaries, and validating firmware execution via high-level simulators—all prior to physical FPGA deployment.
 
-## Project Environment
+# Project Environment
 To maintain consistency and reproducibility, the entire workflow was executed within a cloud-integrated Linux environment.
 # Infrastructure: 
 GitHub Codespaces (Cloud Instance)
@@ -16,45 +16,48 @@ VS Code with Integrated Terminal
 # Graphical Interface: 
 noVNC Web Terminal (for visual output verification)
 
-## Task cycle
-# 1. Toolchain Integrity Check
+# Task cycle
+## 1. Toolchain Integrity Check
 Before beginning development, the system was audited to ensure all necessary binaries were present in the system
-# Compiler: 
+### Compiler: 
 riscv64-unknown-elf-gcc (Cross-compiler for translating C to RISC-V)
-# HDL Tooling: 
+### HDL Tooling: 
 iverilog (For future RTL simulation)
-# Simulation: 
+#33 Simulation: 
 spike (RISC-V ISA Simulator)
 
-# 2. Algorithmic Verification (C to RISC-V)
+## 2. Algorithmic Verification (C to RISC-V)
 A mathematical algorithm (Summation of Integers) was used as a benchmark to test the compilation flow.
-# Workflow: 
+#3# Workflow: 
 1. Authored source code in sum1toN.c. 2. Cross-compiled into an executable ELF file using the RISC-V GCC toolchain. 3. Simulated execution using the Spike ISA Simulator with the Proxy Kernel (pk).
-# Iteration:
+##3 Iteration:
 The code was modified (increasing the summation limit) to verify that the environment handles re-compilation and behavioral changes accurately.
 
 
-# 3. VSDFPGA Firmware Architecture
+#3 3. VSDFPGA Firmware Architecture
 The final stage involved building the official VSDFPGA firmware to generate hardware-ready artifacts.
-# Build System:
+### Build System:
 Utilized make to automate the generation.
-# Simulator Validation: 
+### Simulator Validation: 
 The firmware was executed in a loop within the Spike simulator, successfully rendering the ASCII-based VSD logo. This confirmed that the firmware logic is sound and ready for memory-mapped I/O integration.
 
 # COMMANDS USED 
-```md
 ```bash
    riscv64-unknown-elf-gcc --version
    iverilog -V
    spike --help
 
-
+```
 
 # RISC-V Reference Program Compilation and Execution
-```riscv64-unknown-elf-gcc -o sum1ton.o sum1ton.c  
+
+```bash
+riscv64-unknown-elf-gcc -o sum1ton.o sum1ton.c  
 spike pk sum1ton.o
+```
 # ouput
-sum from 1 to 7 is 28
+```sum from 1 to 9 is 45
+```
 
 
 
