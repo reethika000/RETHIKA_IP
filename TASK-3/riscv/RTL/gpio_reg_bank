@@ -1,4 +1,4 @@
-module gpio_reg_ip (
+module gpio_reg_bank (
     input              clk,
     input              rst_n,
 
