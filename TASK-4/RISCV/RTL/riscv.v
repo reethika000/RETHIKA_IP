@@ -6,9 +6,9 @@
 `default_nettype none
 `include "clockworks.v"
 
-`include "gpio_ctrl_ip.v"
+`include "gpio_reg_ip.v"
 
-`include "timer_ip.v"
+`include "TIMER.v"
 
 `ifdef BENCH
     `include "uart_stub.v"     // prints to terminal
@@ -434,7 +434,7 @@ module SOC (
     wire [31:0] gpio_rdata;
     wire [31:0] gpio_out;
 
-    gpio_ctrl_ip GPIO (
+    gpio_reg_ip IP_INST (
         .clk        (clk),
         .rst_n      (resetn),
         .bus_valid  (is_gpio),
@@ -456,7 +456,7 @@ module SOC (
     wire timer_we  = is_timer & |mem_wmask;
     wire timer_re  = is_timer & mem_rstrb;
 
-    timer_ip TIMER (
+    TIMER IP_INST1 (
         .clk       (clk),
         .resetn    (resetn),
 
