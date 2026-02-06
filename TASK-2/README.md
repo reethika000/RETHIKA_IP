@@ -43,6 +43,35 @@ This understanding ensures that the new IP follows the **same protocol and timin
 ## Step 2 – GPIO IP RTL Design
 
 In this step, a new RTL module named `gpio_ip.v` is created.
+```bash
+`default_nettype none
+
+module gpio_ip (
+    input         clk,
+    input         resetn,
+    input         wr_en,        
+    input         rd_en,        
+    input  [31:0] wr_data,
+    output [31:0] rd_data,
+    output [31:0] gpio_out
+);
+
+    reg [31:0] gpio_reg;
+
+    always @(posedge clk) begin
+        if (!resetn) begin
+            gpio_reg <= 32'b0;
+        end else if (wr_en) begin
+            gpio_reg <= wr_data;
+        end
+    end
+
+    assign rd_data = rd ? gpio_reg : 32'b0;
+
+    assign gpio_out = gpio_reg;
+
+endmodule
+```
 
 
 ### GPIO IP Requirements
@@ -71,7 +100,7 @@ The GPIO IP connects to the system using:
 
 This separation allows the IP to be verified independently before SoC integration.
 
----
+
 
 ## Step 3 – SoC Integration
 
@@ -92,11 +121,17 @@ Once the GPIO IP is verified at the module level, it is integrated into the SoC 
 
 After this step, the GPIO IP becomes a **fully accessible peripheral** from the CPU’s perspective.
 
----
+
 
 ## Step 4 – Simulation‑Based Validation
+![image_1](https://github.com/user-attachments/assets/11a8f41e-cbd8-49af-a419-09536ec93cf3)
 
-Simulation is the **primary proof of correctness** for this task.
+![image_2](https://github.com/user-attachments/assets/0613efc7-7261-489a-b25a-01a82044340b)
+
+![image_3](https://github.com/user-attachments/assets/9e44dca5-8e79-4c1f-b55e-47e3b252b378)
+
+![image_4](https://github.com/user-attachments/assets/60f7b0e9-99c3-4741-a133-2115134880db)
+
 
 ### Software Test Program
 
@@ -124,22 +159,8 @@ This confirms correct **write**, **storage**, and **readback** behavior.
 
 Simulation results confirm that the GPIO behaves exactly as specified.
 
----
 
-## Step 5 – Hardware Validation (Optional)
 
-This step is performed only if an FPGA board is available.
-
-### Hardware Validation Overview
-
-* The same RTL design is synthesized
-* GPIO output is connected to onboard LEDs
-* The same software test is executed
-* LED behavior and UART output are observed
-
-Hardware behavior matches simulation, providing additional confidence.
-
----
 
 ## Submission Summary
 
@@ -150,13 +171,10 @@ This submission includes:
 * Simulation output / waveform evidence
 * Explanation of address mapping and validation
 
-All mandatory requirements of **Task‑2** have been completed successfully.
-
----
 
 ## Conclusion
 
-This task provided hands‑on experience with:
+This task provided 
 
 * Memory‑mapped peripheral design
 * RTL IP development
@@ -164,8 +182,4 @@ This task provided hands‑on experience with:
 * Software‑hardware interaction
 * Simulation‑driven verification
 
-The GPIO IP was designed, integrated, and validated following industry‑style design practices while maintaining originality in documentation and explanation.
-
----
-
-**Status**: Task‑2 completed
+The GPIO IP was designed, integrated, and validated following industry‑style design practices
