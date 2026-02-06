@@ -369,10 +369,10 @@ module SOC (
     gpio_ip IP_INST (
         .clk      (clk),
         .resetn   (resetn),
-        .we       (isIO & mem_wstrb & mem_wordaddr[IO_GPIO_bit]),
-        .re       (isIO & mem_wordaddr[IO_GPIO_bit]), // combinational read
-        .wdata    (mem_wdata),
-        .rdata    (gpio_rdata),
+        .wr_en       (isIO & mem_wstrb & mem_wordaddr[IO_GPIO_bit]),
+        .rd_en       (isIO & mem_wordaddr[IO_GPIO_bit]), // combinational read
+        .wr_data    (mem_wdata),
+        .rd_data    (gpio_rdata),
         .gpio_out (gpio_out)
     );
 
