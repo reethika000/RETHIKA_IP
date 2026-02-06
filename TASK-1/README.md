@@ -1,4 +1,4 @@
-<img width="1920" height="1200" alt="Screenshot 2025-12-18 165659" src="https://github.com/user-attachments/assets/8aa82225-19e0-40e1-a7b6-d07541a124aa" /><img width="1920" height="1200" alt="Screenshot 2025-12-18 165659" src="https://github.com/user-attachments/assets/8aa82225-19e0-40e1-a7b6-d07541a124aa" /># RISC-V System Synthesis & Environment Configuration
+# RISC-V System Synthesis & Environment Configuration
 
 # TASK-1: Toolchain Validation and Firmware Bring-up
 
@@ -23,18 +23,18 @@ Before beginning development, the system was audited to ensure all necessary bin
 riscv64-unknown-elf-gcc (Cross-compiler for translating C to RISC-V)
 ### HDL Tooling: 
 iverilog (For future RTL simulation)
-#33 Simulation: 
+### Simulation: 
 spike (RISC-V ISA Simulator)
 
 ## 2. Algorithmic Verification (C to RISC-V)
 A mathematical algorithm (Summation of Integers) was used as a benchmark to test the compilation flow.
-#3# Workflow: 
+### Workflow: 
 1. Authored source code in sum1toN.c. 2. Cross-compiled into an executable ELF file using the RISC-V GCC toolchain. 3. Simulated execution using the Spike ISA Simulator with the Proxy Kernel (pk).
-##3 Iteration:
+### Iteration:
 The code was modified (increasing the summation limit) to verify that the environment handles re-compilation and behavioral changes accurately.
 
 
-#3 3. VSDFPGA Firmware Architecture
+# 3. VSDFPGA Firmware Architecture
 The final stage involved building the official VSDFPGA firmware to generate hardware-ready artifacts.
 ### Build System:
 Utilized make to automate the generation.
