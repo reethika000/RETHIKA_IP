@@ -59,6 +59,9 @@ spike pk sum1ton.o
 ```sum from 1 to 9 is 45
 ```
 
+<img width="1920" height="1200" alt="Screenshot 2025-12-18 165659" src="https://github.com/user-attachments/assets/0d447bd3-88e3-43e3-9165-30fdbf320895" />
+
+
 
 
 ## Architectural Insights (Understanding Check)
