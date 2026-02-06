@@ -362,13 +362,11 @@ module SOC (
     localparam IO_UART_CNTL_bit = 2;
     localparam IO_GPIO_bit      = 3;
 
-    // ------------------------------------------------------------
-    // GPIO IP
-    // ------------------------------------------------------------
+
     wire [31:0] gpio_rdata;
     wire [31:0] gpio_out;
 
-    gpio_ip GPIO (
+    gpio_ip IP_INST (
         .clk      (clk),
         .resetn   (resetn),
         .we       (isIO & mem_wstrb & mem_wordaddr[IO_GPIO_bit]),
