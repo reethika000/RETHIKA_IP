@@ -1,20 +1,20 @@
-module timer_ip (
-    input              sys_clk,
-    input              rst_n,
+module TIMER (
+    input              clk_i,
+    input              reset_n_i,
 
     // Bus interface
-    input              bus_sel,
-    input              bus_wr,
-    input  [31:0]      bus_addr,
-    input  [31:0]      bus_wdata,
-    output reg [31:0]  bus_rdata,
+    input              cfg_sel_i,
+    input              cfg_wr_i,
+    input  [31:0]      cfg_addr_i,
+    input  [31:0]      cfg_wdata_i,
+    output reg [31:0]  cfg_rdata_o,
 
     // Output
-    output reg         timer_irq
+    output reg         irq_o
 );
 
     // ------------------------------------------------------------
-    // Register map (RENAMED + NEW OFFSETS)
+    // Register map
     // ------------------------------------------------------------
     localparam TMR_CFG     = 32'h10;  // bit0: enable, bit1: periodic
     localparam TMR_RELOAD  = 32'h14;  // reload value
@@ -37,20 +37,20 @@ module timer_ip (
     // ------------------------------------------------------------
     // Write logic
     // ------------------------------------------------------------
-    always @(posedge sys_clk or negedge rst_n) begin
-        if (!rst_n) begin
+    always @(posedge clk_i or negedge reset_n_i) begin
+        if (!reset_n_i) begin
             timer_en       <= 1'b0;
             periodic_mode  <= 1'b0;
-            reload_val     <= 32'd50;   // changed stimulus/default
+            reload_val     <= 32'd50;
         end
-        else if (bus_sel && bus_wr) begin
-            case (bus_addr[7:0])
+        else if (cfg_sel_i && cfg_wr_i) begin
+            case (cfg_addr_i[7:0])
                 TMR_CFG: begin
-                    timer_en      <= bus_wdata[0];
-                    periodic_mode <= bus_wdata[1];
+                    timer_en      <= cfg_wdata_i[0];
+                    periodic_mode <= cfg_wdata_i[1];
                 end
                 TMR_RELOAD: begin
-                    reload_val <= bus_wdata;
+                    reload_val <= cfg_wdata_i;
                 end
                 default: ;
             endcase
@@ -60,20 +60,20 @@ module timer_ip (
     // ------------------------------------------------------------
     // Timer core + IRQ pulse
     // ------------------------------------------------------------
-    always @(posedge sys_clk or negedge rst_n) begin
-        if (!rst_n) begin
+    always @(posedge clk_i or negedge reset_n_i) begin
+        if (!reset_n_i) begin
             count_val <= 32'd0;
-            timer_irq <= 1'b0;
+            irq_o     <= 1'b0;
         end
         else begin
-            timer_irq <= 1'b0;   // 1-cycle pulse
+            irq_o <= 1'b0;   // 1-cycle pulse
 
             if (timer_en && tick) begin
                 if (count_val > 0) begin
                     count_val <= count_val - 1'b1;
                 end
                 else begin
-                    timer_irq <= 1'b1;
+                    irq_o <= 1'b1;
 
                     if (periodic_mode)
                         count_val <= reload_val;
@@ -88,14 +88,13 @@ module timer_ip (
     // Read logic
     // ------------------------------------------------------------
     always @(*) begin
-        case (bus_addr[7:0])
-            TMR_CFG:     bus_rdata = {30'b0, periodic_mode, timer_en};
-            TMR_RELOAD:  bus_rdata = reload_val;
-            TMR_COUNT:   bus_rdata = count_val;
-            TMR_STATUS:  bus_rdata = {31'b0, timer_irq};
-            default:     bus_rdata = 32'b0;
+        case (cfg_addr_i[7:0])
+            TMR_CFG:     cfg_rdata_o = {30'b0, periodic_mode, timer_en};
+            TMR_RELOAD:  cfg_rdata_o = reload_val;
+            TMR_COUNT:   cfg_rdata_o = count_val;
+            TMR_STATUS:  cfg_rdata_o = {31'b0, irq_o};
+            default:     cfg_rdata_o = 32'b0;
         endcase
     end
 
 endmodule
-
