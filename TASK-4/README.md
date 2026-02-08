@@ -36,15 +36,6 @@ basicRISCV/
 │   ├── riscv.v            # SoC top-level with Timer integration
 │   ├── TIMER.v         # Timer peripheral (Task‑4)
 │   ├── gpio_reg_ip.v     # Existing GPIO IP
-│   ├── VSDSquadronFM.pcf  # FPGA pin constraints
-│   └── Makefile
-│
-├── Firmware/
-│   ├── timer_test.c       # Firmware to configure and use Timer IP
-│   ├── start.S            # RISC‑V startup code
-│   ├── firmware.hex       # BRAM image
-│   └── Makefile
-│
 └── README.md
 ```
 
@@ -174,22 +165,6 @@ This cleanly separates **software configuration** from **hardware execution**.
 
 GTKWave waveforms were inspected to confirm signal‑level behavior across the entire data path.
 
----
-
-## Step 6 – FPGA Hardware Validation (Optional)
-
-For hardware validation, the design was synthesized and programmed onto the VSDSquadron FPGA board.
-
-### Observed Hardware Behavior
-
-* FPGA programming completed successfully
-* Timer‑driven LED blinking observed
-* Blinking rate matched configured timer load value
-* No software delay loops involved
-
-This confirms that the Timer IP functions correctly on real hardware, not just in simulation.
-
----
 
 ## Results and Observations
 
@@ -210,11 +185,6 @@ Through Task‑4, I gained hands‑on experience with:
 * Memory‑mapped register interfaces
 * SoC‑level integration challenges
 * Software‑hardware co‑design
-* FPGA bring‑up and validation
-
-These skills closely align with real‑world SoC and FPGA development workflows.
-
----
 
 ## Conclusion
 
