@@ -120,21 +120,13 @@ The supplied example software demonstrates:
 
 ### FPGA Hardware
 
-# Timer IP FPGA Synthesis on VSD Squadron FPGA Mini
+### Timer IP FPGA Synthesis on VSD Squadron FPGA Mini
 
 This project demonstrates the complete RTL-to-hardware FPGA implementation flow of a custom Timer IP on the VSD Squadron FPGA Mini using an open-source iCE40 FPGA toolchain.
 
----
-
-## Project Overview
-
-The Timer IP provides deterministic and reliable hardware-based timing functionality independent of software execution. It supports periodic timeout generation and can be reused as a standard timing block in SoC and FPGA designs.
-
----
-
 ## Project Files
 
-.
+
 ├── final_vsd_timer.v        # Timer IP RTL design  
 ├── top_timer_fpga.v         # FPGA top-level module  
 ├── vsd_squadron.pcf         # Pin constraint file  
@@ -143,15 +135,9 @@ The Timer IP provides deterministic and reliable hardware-based timing functiona
 ├── timer.bin                # FPGA bitstream  
 └── README.md  
 
----
-
 ## Target FPGA Platform
 
 - Board: VSD Squadron FPGA Mini  
-- FPGA Device: iCE40 UP5K  
-- Package: SG48  
-
----
 
 ## FPGA Toolchain Used
 
@@ -160,19 +146,19 @@ The Timer IP provides deterministic and reliable hardware-based timing functiona
 - icepack – Bitstream generation  
 - iceprog – FPGA programming  
 
----
+
 
 ## FPGA Implementation Flow
 
 ### Step 1: RTL Synthesis (Yosys)
 
 The RTL design is synthesized into an FPGA-mapped netlist using Yosys.
-
+```bash
 yosys -p "
 read_verilog final_vsd_timer.v top_timer_fpga.v
 synth_ice40 -top top_timer_fpga -json timer.json
 "
-
+```
 Output:
 - timer.json – Synthesized netlist
 
@@ -181,14 +167,14 @@ Output:
 ### Step 2: Place and Route (nextpnr)
 
 The synthesized netlist is mapped to physical FPGA resources and pins using the constraint file.
-
+```bash
 nextpnr-ice40 \
 --up5k \
 --package sg48 \
 --json timer.json \
 --pcf vsd_squadron.pcf \
 --asc timer.asc
-
+```
 Output:
 - timer.asc – Fully placed and routed FPGA design
 
@@ -196,7 +182,9 @@ Output:
 
 ### Step 3: Bitstream Generation (icepack)
 
+```bash
 icepack timer.asc timer.bin
+```
 
 Output:
 - timer.bin – FPGA configuration bitstream
@@ -205,34 +193,32 @@ Output:
 
 ### Step 4: FPGA Programming (iceprog)
 
+```bash
 iceprog timer.bin
-
+```
 Result:
 - Timer IP runs on FPGA hardware
 - Correct operation verified through LED or timeout output
 
----
+![finalpic1](https://github.com/user-attachments/assets/966972b7-2bb8-4d89-b6ac-5771a1b5d150)
 
-## Applications of Timer IP
+![finalpic2](https://github.com/user-attachments/assets/dd153a01-4256-4284-8d69-fbbb2df8e129)
 
-- Precise and deterministic timing independent of CPU execution  
-- Periodic event generation for system scheduling  
-- Hardware-enforced timeouts for fault detection  
-- Low-power system operation using sleep and idle modes  
-- Replacement for unreliable software delay loops  
+<img width="1920" height="975" alt="finalpic3" src="https://github.com/user-attachments/assets/103e7914-a6b5-4142-a05e-4c1131912084" />
 
----
+![finalpic4](https://github.com/user-attachments/assets/e8670812-1ec3-421f-a81a-ed762f9ca3ef)
 
-## Conclusion
+![finalpic5](https://github.com/user-attachments/assets/5fe08284-0963-49fb-a6e0-c2d96a5a7517)
 
-This project demonstrates a complete FPGA synthesis and implementation flow for a custom Timer IP using open-source tools. The design is successfully deployed on the VSD Squadron FPGA Mini, validating its correctness, determinism, and reusability in real hardware.
+![finalpic6](https://github.com/user-attachments/assets/1de9360c-38f2-4be2-9699-1178273d1ae3)
+
+![finalpic7](https://github.com/user-attachments/assets/d608473d-163b-429c-abe7-a909b11bb327)
 
 
-* On‑board LED toggles periodically
-* Blink rate matches the configured timer value
-* Operation is stable across resets
+## FPGA Hardware Video
 
----
+▶️ [Click here to watch the Timer IP running on FPGA](hardwareimple video.mp4)
+
 
 ## Limitations and Notes
 
