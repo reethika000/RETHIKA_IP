@@ -216,7 +216,9 @@ Result:
 
 ## FPGA Hardware Video
 
-https://github.com/reethika000/RETHIKA_IP/blob/73a8c6316f62bd230a995d294b638afe7750338e/TIMER_IP/video/hardwareimple%20video.mp4
+https://github.com/user-attachments/assets/f72d05fa-cea8-4c21-88aa-012433f23245
+
+
 
 ## Limitations and Notes
 
