@@ -67,7 +67,6 @@ This logical view shows how software configuration flows through register decodi
 ```
 TIMER_IP/timer_ip/
 ├── rtl/        # TIMER  RTL source
-├── software/   # Example C program
 ├── snaps/      # clear screenshots of results
 └── README.md   # Top‑level overview (this file)
 ```
@@ -216,6 +215,8 @@ Result:
 
 
 ## FPGA Hardware Video
+
+
 
 ▶️ [Click here to watch the Timer IP running on FPGA](hardwareimple video.mp4)
 
