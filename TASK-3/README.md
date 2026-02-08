@@ -32,15 +32,6 @@ Task-3/
 │   ├── riscv.v              # SoC top-level integration
 │   ├── gpio_reg_bank        # Multi-register GPIO Control IP     
 │   ├── gpio_reg_tb.v        # testbench code
-│   └── Makefile             # Build and simulation targets
-│
-├── Firmware/
-│   ├── gpio_test.c          # GPIO validation program
-│   ├── start.S              # RISC-V startup code
-│   ├── print.c / print.h    # UART print helpers
-│   ├── bram.ld              # Linker script
-│   └── Makefile             # Firmware build rules
-│
 └── README.md                # Task-3 documentation
 ```
 
