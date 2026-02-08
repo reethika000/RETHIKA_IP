@@ -216,10 +216,7 @@ Result:
 
 ## FPGA Hardware Video
 
-
-
-▶️ [Click here to watch the Timer IP running on FPGA](hardwareimple video.mp4)
-
+https://github.com/reethika000/RETHIKA_IP/blob/73a8c6316f62bd230a995d294b638afe7750338e/TIMER_IP/video/hardwareimple%20video.mp4
 
 ## Limitations and Notes
 
