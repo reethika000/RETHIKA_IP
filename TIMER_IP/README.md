@@ -199,25 +199,34 @@ Result:
 - Timer IP runs on FPGA hardware
 - Correct operation verified through LED or timeout output
 
-![finalpic1](https://github.com/user-attachments/assets/966972b7-2bb8-4d89-b6ac-5771a1b5d150)
 
-![finalpic2](https://github.com/user-attachments/assets/dd153a01-4256-4284-8d69-fbbb2df8e129)
-
-<img width="1920" height="975" alt="finalpic3" src="https://github.com/user-attachments/assets/103e7914-a6b5-4142-a05e-4c1131912084" />
-
-![finalpic4](https://github.com/user-attachments/assets/e8670812-1ec3-421f-a81a-ed762f9ca3ef)
-
-![finalpic5](https://github.com/user-attachments/assets/5fe08284-0963-49fb-a6e0-c2d96a5a7517)
-
-![finalpic6](https://github.com/user-attachments/assets/1de9360c-38f2-4be2-9699-1178273d1ae3)
-
-![finalpic7](https://github.com/user-attachments/assets/d608473d-163b-429c-abe7-a909b11bb327)
+<img width="1920" height="977" alt="timerpic1" src="https://github.com/user-attachments/assets/fff75569-26de-4d95-aca6-4563e290ca7e" />
 
 
-## FPGA Hardware Video
+![timerpic2](https://github.com/user-attachments/assets/7a784f0a-509e-483e-b932-7eedb4630ba1)
 
-https://github.com/user-attachments/assets/f72d05fa-cea8-4c21-88aa-012433f23245
 
+
+![timerpic3](https://github.com/user-attachments/assets/db0f4705-b125-40d2-926c-f20ba828c49a)
+
+
+![timerpic4](https://github.com/user-attachments/assets/04cbbef4-6826-49a3-a14b-0bf9cbc59189)
+
+
+![timerpic5](https://github.com/user-attachments/assets/14cc8430-a024-412b-b52b-937c28c3e142)
+
+
+![timerpic6](https://github.com/user-attachments/assets/dbb57164-f90c-4e48-827b-7d9695f118c3)
+
+
+![timerpic7](https://github.com/user-attachments/assets/e4e1505a-0383-406f-b613-25b904c97dbd)
+
+
+
+## FPGA Hardware video
+
+
+https://github.com/user-attachments/assets/75ad32af-a7e7-4250-a2c9-f85c4868214c
 
 
 ## Limitations and Notes
