@@ -153,10 +153,6 @@ This cleanly separates **software configuration** from **hardware execution**.
 ![modified3](https://github.com/user-attachments/assets/253ae6ac-0bc5-4eca-a951-fe3f9822f480)
 
 
-![modified4](https://github.com/user-attachments/assets/b860107c-b41d-4602-8a00-4486c27f677e)
-
-
-<img width="1920" height="1012" alt="Screenshot from 2026-02-18 06-59-35" src="https://github.com/user-attachments/assets/cd3ca8dc-fd92-4492-a7e9-8c3c167704cd" />
 
 
 <img width="1920" height="1012" alt="modified5" src="https://github.com/user-attachments/assets/7c571d3c-bd86-4b23-80ce-7f5640c426d5" />
