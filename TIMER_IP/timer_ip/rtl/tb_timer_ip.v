@@ -1,118 +1,132 @@
-module timer_ip (
-    input            clk,
-    input            resetn,
+`timescale 1ns/1ps
 
-    // Bus interface
-    input            sel,
-    input            we,
-    input  [31:0]    addr,
-    input  [31:0]    wdata,
-    output reg [31:0] rdata,
-
-    // Output
-    output           timeout
-);
-
-   
-    localparam REG_CTRL  = 4'h0;  // 0x00
-    localparam REG_LOAD  = 4'h4;  // 0x04
-    localparam REG_VALUE = 4'h8;  // 0x08
-    localparam REG_STAT  = 4'hC;  // 0x0C
+module tb_timer_ip;
 
     
-    reg        en;
-    reg        mode;           // 0 = one-shot, 1 = periodic
-    reg [31:0] load_reg;
-    reg [31:0] value_reg;
+    reg         clk;
+    reg         resetn;
+    reg         sel;
+    reg         we;
+    reg [31:0]  addr;
+    reg [31:0]  wdata;
+    wire [31:0] rdata;
+    wire        timeout;
 
-    reg        timeout_flag;   // Sticky timeout
-    reg        en_d;           // Delayed EN for edge detection
+ 
+    timer_ip dut (
+        .clk     (clk),
+        .resetn  (resetn),
+        .sel     (sel),
+        .we      (we),
+        .addr    (addr),
+        .wdata   (wdata),
+        .rdata   (rdata),
+        .timeout (timeout)
+    );
+
+    always #5 clk = ~clk;
 
     
-    wire en_rise = en & ~en_d;
+    task bus_write(input [31:0] waddr, input [31:0] data);
+    begin
+        @(posedge clk);
+        sel   <= 1'b1;
+        we    <= 1'b1;
+        addr  <= waddr;
+        wdata <= data;
 
-    always @(posedge clk or negedge resetn) begin
-        if (!resetn)
-            en_d <= 1'b0;
-        else
-            en_d <= en;
+        @(posedge clk);
+        sel   <= 1'b0;
+        we    <= 1'b0;
+        addr  <= 32'd0;
+        wdata <= 32'd0;
     end
-
-   
-    always @(posedge clk or negedge resetn) begin
-        if (!resetn) begin
-            en       <= 1'b0;
-            mode     <= 1'b0;
-            load_reg <= 32'd0;
-        end
-        else if (sel && we) begin
-            case (addr[3:0])
-                REG_CTRL: begin
-                    en   <= wdata[0];
-                    mode <= wdata[1];
-                end
-
-                REG_LOAD: begin
-                    load_reg <= wdata;
-                end
-
-                // Write-1-to-clear TIMEOUT
-                REG_STAT: begin
-                    if (wdata[0])
-                        timeout_flag <= 1'b0;
-                end
-
-                default: ;
-            endcase
-        end
-    end
+    endtask
 
     
-    always @(posedge clk or negedge resetn) begin
-        if (!resetn) begin
-            value_reg    <= 32'd0;
-            timeout_flag <= 1'b0;
-        end
-        else begin
+    task bus_read(input [31:0] raddr);
+    begin
+        @(posedge clk);
+        sel  <= 1'b1;
+        we   <= 1'b0;
+        addr <= raddr;
 
-            // Load value when EN transitions 0 -> 1
-            if (en_rise) begin
-                value_reg <= load_reg;
+        @(posedge clk);
+        $display("TIME=%0t | READ [0x%0h] = 0x%0h",
+                  $time, raddr, rdata);
+
+        sel  <= 1'b0;
+        addr <= 32'd0;
+    end
+    endtask
+
+  
+    initial begin
+        
+        $dumpfile("timer_ip.vcd");
+        $dumpvars(0, tb_timer_ip);
+
+        
+        clk    = 0;
+        resetn = 0;
+        sel    = 0;
+        we     = 0;
+        addr   = 0;
+        wdata  = 0;
+
+        #30;
+        resetn = 1;
+
+        
+        $display("\n==============================");
+        $display(" ONE-SHOT MODE TEST ");
+        $display("==============================");
+
+        bus_write(32'h04, 5);        // LOAD = 5
+        bus_write(32'h00, 32'b01);   // CTRL: EN=1, MODE=0
+
+        repeat (8) begin
+            bus_read(32'h08);        // VALUE
+            @(posedge clk);
+        end
+
+        // Timeout must be sticky
+        bus_read(32'h0C);            // STATUS
+
+        // Clear TIMEOUT (W1C)
+        bus_write(32'h0C, 32'h1);
+        bus_read(32'h0C);
+
+        // VALUE must remain 0 (one-shot stop)
+        repeat (3) begin
+            bus_read(32'h08);
+            @(posedge clk);
+        end
+
+        $display("\n==============================");
+        $display(" PERIODIC MODE TEST ");
+        $display("==============================");
+
+        bus_write(32'h04, 3);        // LOAD = 3
+        bus_write(32'h00, 32'b11);   // CTRL: EN=1, MODE=1
+
+        repeat (12) begin
+            bus_read(32'h08);        // VALUE
+            bus_read(32'h0C);        // STATUS
+
+            // Clear timeout if set
+            if (timeout) begin
+                $display("Clearing TIMEOUT...");
+                bus_write(32'h0C, 32'h1);
             end
 
-            // Countdown logic
-            else if (en && (value_reg > 0)) begin
-                value_reg <= value_reg - 1'b1;
-            end
-
-            // When countdown reaches zero
-            else if (en && (value_reg == 0) && !timeout_flag) begin
-                timeout_flag <= 1'b1;   // Sticky set
-
-                if (mode) begin
-                    // Periodic mode: reload automatically
-                    value_reg <= load_reg;
-                end
-                else begin
-                    // One-shot mode: stop timer
-                    en <= 1'b0;         // Auto-clear enable
-                end
-            end
+            @(posedge clk);
         end
-    end
 
-    
-    always @(*) begin
-        case (addr[3:0])
-            REG_CTRL:  rdata = {30'b0, mode, en};
-            REG_LOAD:  rdata = load_reg;
-            REG_VALUE: rdata = value_reg;
-            REG_STAT:  rdata = {31'b0, timeout_flag};
-            default:   rdata = 32'd0;
-        endcase
+       
+        $display("\nSimulation completed successfully.");
+        #50;
+        $finish;
     end
-
-    
-    assign timeout = timeout_flag;
 
 endmodule
