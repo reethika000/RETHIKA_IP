@@ -2,102 +2,155 @@
 
 module tb_timer_ip;
 
-    reg sys_clk;
-    reg rst_n;
-    reg         bus_sel;
-    reg         bus_wr;
-    reg [31:0]  bus_addr;
-    reg [31:0]  bus_wdata;
-    wire [31:0] bus_rdata;
-    wire timer_irq;
+    // ------------------------------------------------------------
+    // DUT signals
+    // ------------------------------------------------------------
+    reg         clk;
+    reg         resetn;
+    reg         sel;
+    reg         we;
+    reg [31:0]  addr;
+    reg [31:0]  wdata;
+    wire [31:0] rdata;
+    wire        timeout;
 
-    localparam TMR_CFG     = 32'h10;
-    localparam TMR_RELOAD  = 32'h14;
-    localparam TMR_COUNT   = 32'h18;
-    localparam TMR_STATUS  = 32'h1C;
+    // ------------------------------------------------------------
+    // Instantiate DUT
+    // ------------------------------------------------------------
+    TIMER dut (
+        .clk     (clk),
+        .resetn  (resetn),
+        .sel     (sel),
+        .we      (we),
+        .addr    (addr),
+        .wdata   (wdata),
+        .rdata   (rdata),
+        .timeout (timeout)
+    );
 
-module TIMER uut (
-    input              clk_i,
-    input              reset_n_i,
-    input              cfg_sel_i,
-    input              cfg_wr_i,
-    input  [31:0]      cfg_addr_i,
-    input  [31:0]      cfg_wdata_i,
-    output reg [31:0]  cfg_rdata_o,
-    output reg         irq_o
-);
+    // ------------------------------------------------------------
+    // Clock generation (100 MHz)
+    // ------------------------------------------------------------
+    always #5 clk = ~clk;
 
-
-    always #5 sys_clk = ~sys_clk;
-
-    initial begin
-        $dumpfile("TIMER.vcd");     // VCD file name
-        $dumpvars(0, tb_timer_ip);     // dump everything
-        //$dumpvars(1, dut);           // (optional) only DUT
-    end
-
-    task bus_write(input [31:0] addr, input [31:0] data);
+    // ------------------------------------------------------------
+    // Bus write task
+    // ------------------------------------------------------------
+    task bus_write(input [31:0] waddr, input [31:0] data);
     begin
-        @(posedge sys_clk);
-        bus_sel   <= 1'b1;
-        bus_wr    <= 1'b1;
-        bus_addr  <= addr;
-        bus_wdata <= data;
-        @(posedge sys_clk);
-        bus_sel   <= 1'b0;
-        bus_wr    <= 1'b0;
-        bus_addr  <= 32'd0;
-        bus_wdata <= 32'd0;
+        @(posedge clk);
+        sel   <= 1'b1;
+        we    <= 1'b1;
+        addr  <= waddr;
+        wdata <= data;
+
+        @(posedge clk);
+        sel   <= 1'b0;
+        we    <= 1'b0;
+        addr  <= 32'd0;
+        wdata <= 32'd0;
     end
     endtask
 
-    task bus_read(input [31:0] addr);
+    // ------------------------------------------------------------
+    // Bus read task
+    // ------------------------------------------------------------
+    task bus_read(input [31:0] raddr);
     begin
-        @(posedge sys_clk);
-        bus_sel  <= 1'b1;
-        bus_wr   <= 1'b0;
-        bus_addr <= addr;
-        @(posedge sys_clk);
-        bus_sel  <= 1'b0;
-        bus_addr <= 32'd0;
+        @(posedge clk);
+        sel  <= 1'b1;
+        we   <= 1'b0;
+        addr <= raddr;
+
+        @(posedge clk);
+        $display("TIME=%0t | READ [0x%0h] = 0x%0h",
+                  $time, raddr, rdata);
+
+        sel  <= 1'b0;
+        addr <= 32'd0;
     end
     endtask
 
+    // ------------------------------------------------------------
+    // Test sequence
+    // ------------------------------------------------------------
     initial begin
-        sys_clk    = 0;
-        rst_n      = 0;
-        bus_sel   = 0;
-        bus_wr    = 0;
-        bus_addr  = 0;
-        bus_wdata = 0;
+        // ------------------------
+        // Dump VCD
+        // ------------------------
+        $dumpfile("timer_ip.vcd");
+        $dumpvars(0, tb_timer_ip);
+
+        // ------------------------
+        // Init
+        // ------------------------
+        clk    = 0;
+        resetn = 0;
+        sel    = 0;
+        we     = 0;
+        addr   = 0;
+        wdata  = 0;
 
         #30;
-        rst_n = 1;
+        resetn = 1;
 
-        $display("\n--- One-shot mode test ---");
-        bus_write(TMR_RELOAD, 32'd10);
-        bus_write(TMR_CFG,    32'b01);
+        // =========================================================
+        // ONE-SHOT MODE TEST
+        // =========================================================
+        $display("\n==============================");
+        $display(" ONE-SHOT MODE TEST ");
+        $display("==============================");
 
-        repeat (15) @(posedge sys_clk);
+        bus_write(32'h04, 5);        // LOAD = 5
+        bus_write(32'h00, 32'b01);   // CTRL: EN=1, MODE=0
 
-        $display("\n--- Periodic mode test ---");
-        bus_write(TMR_RELOAD, 32'd5);
-        bus_write(TMR_CFG,    32'b11);
+        repeat (8) begin
+            bus_read(32'h08);        // VALUE
+            @(posedge clk);
+        end
 
-        repeat (30) @(posedge sys_clk);
+        // Timeout must be sticky
+        bus_read(32'h0C);            // STATUS
 
-        bus_read(TMR_COUNT);
-        bus_read(TMR_STATUS);
+        // Clear TIMEOUT (W1C)
+        bus_write(32'h0C, 32'h1);
+        bus_read(32'h0C);
 
+        // VALUE must remain 0 (one-shot stop)
+        repeat (3) begin
+            bus_read(32'h08);
+            @(posedge clk);
+        end
+
+        // =========================================================
+        // PERIODIC MODE TEST
+        // =========================================================
+        $display("\n==============================");
+        $display(" PERIODIC MODE TEST ");
+        $display("==============================");
+
+        bus_write(32'h04, 3);        // LOAD = 3
+        bus_write(32'h00, 32'b11);   // CTRL: EN=1, MODE=1
+
+        repeat (12) begin
+            bus_read(32'h08);        // VALUE
+            bus_read(32'h0C);        // STATUS
+
+            // Clear timeout if set
+            if (timeout) begin
+                $display("Clearing TIMEOUT...");
+                bus_write(32'h0C, 32'h1);
+            end
+
+            @(posedge clk);
+        end
+
+        // =========================================================
+        // END
+        // =========================================================
+        $display("\nSimulation completed successfully.");
         #50;
-        $display("\nSimulation finished");
         $finish;
     end
 
-    always @(posedge sys_clk) begin
-        if (timer_irq)
-            $display("Time %0t ns : TIMER IRQ ASSERTED", $time);
-    end
-
 endmodule
-
