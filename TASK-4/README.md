@@ -31,11 +31,13 @@ This task demonstrates several core SoC concepts:
 The project is organized to separate RTL, firmware, and constraints clearly:
 
 ```
-basicRISCV/
+RISCV/
 ├── RTL/
 │   ├── riscv.v            # SoC top-level with Timer integration
 │   ├── TIMER.v         # Timer peripheral (Task‑4)
 │   ├── gpio_reg_ip.v     # Existing GPIO IP
+├── Firmware/
+    ├── timertest.c
 └── README.md
 ```
 
