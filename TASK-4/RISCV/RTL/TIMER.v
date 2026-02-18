@@ -1,77 +1,132 @@
 module TIMER (
-    input              clk_i,
-    input              reset_n_i,
-    input              cfg_sel_i,
-    input              cfg_wr_i,
-    input  [31:0]      cfg_addr_i,
-    input  [31:0]      cfg_wdata_i,
-    output reg [31:0]  cfg_rdata_o,
-    output reg         irq_o
+    input            clk,
+    input            resetn,
+
+    // Bus interface
+    input            sel,
+    input            we,
+    input  [31:0]    addr,
+    input  [31:0]    wdata,
+    output reg [31:0] rdata,
+
+    // Output
+    output           timeout
 );
 
-    localparam TMR_CFG     = 32'h10;  // bit0: enable, bit1: periodic
-    localparam TMR_RELOAD  = 32'h14;  // reload value
-    localparam TMR_COUNT   = 32'h18;  // current counter (RO)
-    localparam TMR_STATUS  = 32'h1C;  // bit0: timeout pulse
-    reg        timer_en;
-    reg        periodic_mode;
-    reg [31:0] reload_val;
-    reg [31:0] count_val;
+    // ------------------------------------------------------------
+    // Register map (offsets)
+    // ------------------------------------------------------------
+    localparam REG_CTRL  = 4'h0;  // 0x00
+    localparam REG_LOAD  = 4'h4;  // 0x04
+    localparam REG_VALUE = 4'h8;  // 0x08
+    localparam REG_STAT  = 4'hC;  // 0x0C
 
-    wire tick = 1'b1;
+    // ------------------------------------------------------------
+    // Internal Registers
+    // ------------------------------------------------------------
+    reg        en;
+    reg        mode;           // 0 = one-shot, 1 = periodic
+    reg [31:0] load_reg;
+    reg [31:0] value_reg;
 
-    always @(posedge clk_i or negedge reset_n_i) begin
-        if (!reset_n_i) begin
-            timer_en       <= 1'b0;
-            periodic_mode  <= 1'b0;
-            reload_val     <= 32'd50;
+    reg        timeout_flag;   // Sticky timeout
+    reg        en_d;           // Delayed EN for edge detection
+
+    // ------------------------------------------------------------
+    // Enable rising edge detection (LOAD-ON-ENABLE)
+    // ------------------------------------------------------------
+    wire en_rise = en & ~en_d;
+
+    always @(posedge clk or negedge resetn) begin
+        if (!resetn)
+            en_d <= 1'b0;
+        else
+            en_d <= en;
+    end
+
+    // ------------------------------------------------------------
+    // Write logic
+    // ------------------------------------------------------------
+    always @(posedge clk or negedge resetn) begin
+        if (!resetn) begin
+            en       <= 1'b0;
+            mode     <= 1'b0;
+            load_reg <= 32'd0;
         end
-        else if (cfg_sel_i && cfg_wr_i) begin
-            case (cfg_addr_i[7:0])
-                TMR_CFG: begin
-                    timer_en      <= cfg_wdata_i[0];
-                    periodic_mode <= cfg_wdata_i[1];
+        else if (sel && we) begin
+            case (addr[3:0])
+                REG_CTRL: begin
+                    en   <= wdata[0];
+                    mode <= wdata[1];
                 end
-                TMR_RELOAD: begin
-                    reload_val <= cfg_wdata_i;
+
+                REG_LOAD: begin
+                    load_reg <= wdata;
                 end
+
+                // Write-1-to-clear TIMEOUT
+                REG_STAT: begin
+                    if (wdata[0])
+                        timeout_flag <= 1'b0;
+                end
+
                 default: ;
             endcase
         end
     end
 
-    always @(posedge clk_i or negedge reset_n_i) begin
-        if (!reset_n_i) begin
-            count_val <= 32'd0;
-            irq_o     <= 1'b0;
+    // ------------------------------------------------------------
+    // Timer Core Logic (Correct Semantics)
+    // ------------------------------------------------------------
+    always @(posedge clk or negedge resetn) begin
+        if (!resetn) begin
+            value_reg    <= 32'd0;
+            timeout_flag <= 1'b0;
         end
         else begin
-            irq_o <= 1'b0;   // 1-cycle pulse
 
-            if (timer_en && tick) begin
-                if (count_val > 0) begin
-                    count_val <= count_val - 1'b1;
+            // Load value when EN transitions 0 -> 1
+            if (en_rise) begin
+                value_reg <= load_reg;
+            end
+
+            // Countdown logic
+            else if (en && (value_reg > 0)) begin
+                value_reg <= value_reg - 1'b1;
+            end
+
+            // When countdown reaches zero
+            else if (en && (value_reg == 0) && !timeout_flag) begin
+                timeout_flag <= 1'b1;   // Sticky set
+
+                if (mode) begin
+                    // Periodic mode: reload automatically
+                    value_reg <= load_reg;
                 end
                 else begin
-                    irq_o <= 1'b1;
-
-                    if (periodic_mode)
-                        count_val <= reload_val;
-                    else
-                        count_val <= 32'd0;
+                    // One-shot mode: stop timer
+                    en <= 1'b0;         // Auto-clear enable
                 end
             end
         end
     end
 
+    // ------------------------------------------------------------
+    // Read logic
+    // ------------------------------------------------------------
     always @(*) begin
-        case (cfg_addr_i[7:0])
-            TMR_CFG:     cfg_rdata_o = {30'b0, periodic_mode, timer_en};
-            TMR_RELOAD:  cfg_rdata_o = reload_val;
-            TMR_COUNT:   cfg_rdata_o = count_val;
-            TMR_STATUS:  cfg_rdata_o = {31'b0, irq_o};
-            default:     cfg_rdata_o = 32'b0;
+        case (addr[3:0])
+            REG_CTRL:  rdata = {30'b0, mode, en};
+            REG_LOAD:  rdata = load_reg;
+            REG_VALUE: rdata = value_reg;
+            REG_STAT:  rdata = {31'b0, timeout_flag};
+            default:   rdata = 32'd0;
         endcase
     end
+
+    // ------------------------------------------------------------
+    // Output
+    // ------------------------------------------------------------
+    assign timeout = timeout_flag;
 
 endmodule
