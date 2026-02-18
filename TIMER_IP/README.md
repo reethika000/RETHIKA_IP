@@ -102,11 +102,34 @@ The supplied example software demonstrates:
 
 ### Simulation
 ## RESULTS 
-![pic_1](https://github.com/user-attachments/assets/747c6d26-622f-4b47-9a11-bc5a6f3b5221)
 
-<img width="798" height="600" alt="pic_2" src="https://github.com/user-attachments/assets/f8d10851-540a-4665-84a9-570282c217f8" />
 
-![pic_3](https://github.com/user-attachments/assets/80d72dfe-0e43-4baa-af5d-38ae12a9380d)
+![modified1](https://github.com/user-attachments/assets/32f31e38-59f4-41d7-ad8e-8204d12a96c9)
+
+
+
+![modified2](https://github.com/user-attachments/assets/e7cbd420-b17b-4486-a93b-744dd277b6c6)
+
+
+![modified3](https://github.com/user-attachments/assets/36c1e0cc-7962-4635-b29b-ef2c9133950d)
+
+
+
+<img width="1920" height="1012" alt="Screenshot from 2026-02-18 06-59-35" src="https://github.com/user-attachments/assets/2befd2ff-6d35-4b69-a67d-96abd6eb1f0d" />
+
+
+
+
+![modified6](https://github.com/user-attachments/assets/56782fd2-c7be-4322-8a6f-b0ef44b8c262)
+
+
+
+![modified7](https://github.com/user-attachments/assets/2fd699f6-fa1d-4f74-8eb2-08b92017970e)
+
+
+
+
+![modified8](https://github.com/user-attachments/assets/334360a4-6a47-483a-a139-ec6a2a5849d5)
 
 
 
