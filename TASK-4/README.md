@@ -144,18 +144,35 @@ This cleanly separates **software configuration** from **hardware execution**.
 
 ## Step 5 – Simulation‑Based Verification
 
-![pic1](https://github.com/user-attachments/assets/1cfe96e3-1a80-4a3f-afcd-2afc3fbd7f06)
 
-![pic2](https://github.com/user-attachments/assets/7a5fcbd1-1e49-45df-b08b-4bdcd029f234)
+![modified1](https://github.com/user-attachments/assets/74d8ae09-f8af-4d65-b2e3-a38193ff4dd4)
 
-![pic3](https://github.com/user-attachments/assets/5ffeb4a7-d332-4a27-b4bb-b2ba5faf3187)
-
-![pic5](https://github.com/user-attachments/assets/ffb6ed1a-aafc-4efb-8098-89dba84c73ca)
-
-![pic5](https://github.com/user-attachments/assets/372f251c-c1eb-4f6c-88e7-7ef03d0d7249)
+### ![modified2](https://github.com/user-attachments/assets/ad5a1b30-aa6b-4629-b73a-1fbad3571367)
 
 
-### Verified Through Simulation
+![modified3](https://github.com/user-attachments/assets/253ae6ac-0bc5-4eca-a951-fe3f9822f480)
+
+
+![modified4](https://github.com/user-attachments/assets/b860107c-b41d-4602-8a00-4486c27f677e)
+
+
+<img width="1920" height="1012" alt="Screenshot from 2026-02-18 06-59-35" src="https://github.com/user-attachments/assets/cd3ca8dc-fd92-4492-a7e9-8c3c167704cd" />
+
+
+<img width="1920" height="1012" alt="modified5" src="https://github.com/user-attachments/assets/7c571d3c-bd86-4b23-80ce-7f5640c426d5" />
+
+
+
+![modified6](https://github.com/user-attachments/assets/e04bab70-3781-4800-9e88-441d8cbae3cd)
+
+
+![modified7](https://github.com/user-attachments/assets/7ec4eb56-4b69-4996-bd79-64e6e25ba5fa)
+
+
+
+![modified8](https://github.com/user-attachments/assets/895828a2-7501-48a7-b304-2561b541fc1b)
+
+
 
 * Correct register writes from CPU
 * Proper address decoding for Timer IP
