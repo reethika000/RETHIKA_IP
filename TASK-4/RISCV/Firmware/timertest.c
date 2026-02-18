@@ -1,9 +1,4 @@
-// timer_test.c
-// Demonstrates:
-// 1) One-shot mode
-// 2) Sticky TIMEOUT
-// 3) Write-1-to-Clear (W1C)
-// 4) Periodic mode auto-reload
+
 
 #define TIMER_BASE   0x20001000
 
@@ -28,9 +23,9 @@ void delay_loop()
 
 int main(void)
 {
-    // =====================================================
-    // 1️⃣ ONE-SHOT MODE TEST
-    // =====================================================
+   
+    //  ONE-SHOT MODE TEST
+  
     
     TIMER_LOAD = TEST_COUNT;
 
@@ -41,10 +36,7 @@ int main(void)
     while ((TIMER_STAT & STAT_TIMEOUT) == 0)
         ;
 
-    // At this point:
-    // - VALUE must be 0
-    // - Timer must stop automatically
-    // - TIMEOUT must remain 1 (sticky)
+    
 
     // Clear TIMEOUT using W1C
     TIMER_STAT = STAT_TIMEOUT;
@@ -52,9 +44,9 @@ int main(void)
     // Small delay to prove it does NOT restart
     delay_loop();
 
-    // =====================================================
-    // 2️⃣ PERIODIC MODE TEST
-    // =====================================================
+
+    // PERIODIC MODE TEST
+   
 
     TIMER_LOAD = TEST_COUNT;
 
@@ -70,10 +62,7 @@ int main(void)
         // Clear sticky timeout
         TIMER_STAT = STAT_TIMEOUT;
 
-        // In periodic mode:
-        // - Timer auto reloads
-        // - Continues running
-        // - Timeout keeps repeating
+        
     }
 
     return 0;
