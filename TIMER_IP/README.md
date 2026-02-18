@@ -67,6 +67,9 @@ This logical view shows how software configuration flows through register decodi
 ```
 TIMER_IP/timer_ip/
 ├── rtl/        # TIMER  RTL source
+    ├── timer_ip.v
+├── Software/
+    ├── timertest.c
 ├── snaps/      # clear screenshots of results
 └── README.md   # Top‑level overview (this file)
 ```
