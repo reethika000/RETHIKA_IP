@@ -71,7 +71,7 @@ output
 ```bash
 sum from 1 to 6 is 21
 ```
-<img width="1920" height="1001" alt="Screenshot 2025-12-18 173742" src="https://github.com/user-attachments/assets/c80ee59b-5f05-4cfa-919b-9bdb9ffc58bf" />
+
 
 
 ## Commands used 
@@ -82,7 +82,7 @@ riscv_logo.bram.hex
 riscv64-unknown-elf-gcc -o riscv_logo.o riscv_logo.c  
 spike pk riscv_logo.o
 ```
-<img width="862" height="980" alt="Screenshot 2025-12-18 180614" src="https://github.com/user-attachments/assets/21275093-2a37-4d55-bc6b-7ada7b89e42a" />
+
 
 <img width="1660" height="935" alt="FINALOUTPUT" src="https://github.com/user-attachments/assets/97b86923-7bad-4c23-9f30-0899d7fc554d" />
 
