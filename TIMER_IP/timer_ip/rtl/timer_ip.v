@@ -36,6 +36,7 @@ module timer_ip (
                 end
                 REG_LOAD: begin
                     load_reg <= wdata;
+                    value_reg <= wdata;
                 end
                 default: ;
             endcase
